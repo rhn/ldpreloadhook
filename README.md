@@ -1,36 +1,50 @@
-ldpreloadhook
-=============
+VultureMap
+==========
 
-a quick open/close/ioctl/read/write/free symbol hooker
+Remaps keys for Vulture's Eye.
 
-**Usage:**
+Currently, it allows to use directional keys in a sane way when no keypad is available.
 
-1. Compile:
-<pre>
-      $ gcc -fPIC -c -o hook.o hook.c
-      $ gcc -shared -o hook.so hook.o -ldl
-</pre>
+```
+i o p
+ \|/
+k-l-;
+ /|\
+, . /
+```
 
-2. preload the library and run the command you want to hook:
-<pre>
-      LD_PRELOAD="./hook.so" command
-</pre>
+To use these as directions, hold the Windows key. The option `number_pad` must be 0.
 
-Optionally, if you want to spy a concrete file you can set the environment variable SPYFILE, for example /dev/serio_raw0:
-<pre>
-      LD_PRELOAD="./hook.so" SPYFILE="/dev/serio_raw0" command
-</pre>
+Requirements
+------------
 
-All data read from this file will be saved in /tmp/read_data.bin
+- SDL1.2 development headers
+- gcc
+- Vulture's Eye
 
-All data written to this file will be saved in /tmp/write_data.bin
+Installation
+------------
 
-Optionally, if you want to have a delimiter set in the read/write data files each time the file is opened, you can set the environment variable DELIMITER:
-<pre>
-      LD_PRELOAD="./hook.so" SPYFILE="/dev/serio_raw0" DELIMITER="---" command
-</pre>
+```
+cd vulturemap
+make
+```
 
-You can also spy on free() calls by setting the environment variable SPYFREE, this will print the contents of every buffer before free()ing them:
-<pre>
-      LD_PRELOAD="./hook.so" SPYFREE=1 command
-</pre>
+If your binary is setuid/setgid, `LD_PRELOAD` will not just work. Some additional preparation is required.
+
+### Fedora
+
+```
+sudo useradd -a -G vultures $MYUSER
+cp /usr/games/vultureseye/vultureseye vulturemap/
+su $MYUSER # to use new groups
+```
+
+Usage
+-----
+
+The hook requires th
+
+```
+LD_PRELOAD="./hook.so" vultureseye
+```
